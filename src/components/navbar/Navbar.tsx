@@ -1,6 +1,8 @@
 import React from "react";
 import MaxWidthWrapper from "@/components/wrappers/MaxWidthWrapper";
 import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
+import AuthBtns from "./AuthBtns";
 
 type Props = {};
 export default function Navbar({}: Props) {
@@ -11,8 +13,13 @@ export default function Navbar({}: Props) {
           <span className="font-semibold">Hermes</span>
         </Link>
         <div className="flex gap-2 justify-between items-center">
-          <div>HHHH</div>
-          <div>HHHH</div>
+          <Link
+            href="/pricing"
+            className={buttonVariants({ size: "sm", variant: "ghost" })}
+          >
+            Pricing
+          </Link>
+          <AuthBtns />
         </div>
       </MaxWidthWrapper>
     </nav>
