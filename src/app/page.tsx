@@ -13,7 +13,7 @@ export default function Home() {
           description in minutes.
         </p>
         <div className="flex justify-center gap-4">
-          <Link className={buttonVariants({ size: "lg" })} href="/">
+          <Link className={buttonVariants({ size: "lg" })} href="/dashboard">
             Get Started <ArrowRight className="ml-2 h-5 w-5" />
           </Link>
         </div>
