@@ -1,5 +1,6 @@
-import { buttonVariants } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { SignInButton, SignUpButton } from "@clerk/nextjs";
+import { ArrowRight, LogInIcon } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -13,9 +14,11 @@ export default function Home() {
           description in minutes.
         </p>
         <div className="flex justify-center gap-4">
-          <Link className={buttonVariants({ size: "lg" })} href="/dashboard">
-            Get Started <ArrowRight className="ml-2 h-5 w-5" />
-          </Link>
+          <SignUpButton>
+            <Button size="lg">
+              Get started <LogInIcon className="ml-1.5 h-5 w-5" />
+            </Button>
+          </SignUpButton>
         </div>
       </section>
     </main>

@@ -1,8 +1,16 @@
 import React from "react";
 import MaxWidthWrapper from "@/components/wrappers/MaxWidthWrapper";
 import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
-import AuthBtns from "./AuthBtns";
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  SignIn,
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
+import { LogInIcon } from "lucide-react";
 
 type Props = {};
 export default function Navbar({}: Props) {
@@ -19,7 +27,21 @@ export default function Navbar({}: Props) {
           >
             Pricing
           </Link>
-          <AuthBtns />
+          <SignedIn>
+            <UserButton showName />
+          </SignedIn>
+          <SignedOut>
+            <SignInButton>
+              <Button size="sm" variant="ghost">
+                Sign In
+              </Button>
+            </SignInButton>
+            <SignUpButton>
+              <Button size="sm">
+                Get started <LogInIcon className="ml-1.5 h-5 w-5" />
+              </Button>
+            </SignUpButton>
+          </SignedOut>
         </div>
       </MaxWidthWrapper>
     </nav>
