@@ -7,7 +7,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-export const jobs = pgTable("jobs", {
+export const jobsTable = pgTable("jobs", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   description: text("description").notNull(),
@@ -19,10 +19,10 @@ export const jobs = pgTable("jobs", {
     .notNull()
     .$onUpdate(() => new Date()),
   user_id: varchar("user_id", { length: 256 }).notNull(), // Clerk AUth ID
-  file_id: integer("file_id").references(() => files.id),
+  file_id: integer("file_id").references(() => filesTable.id),
 });
 
-export const files = pgTable("files", {
+export const filesTable = pgTable("files", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   url: text("url").notNull(),
@@ -30,3 +30,6 @@ export const files = pgTable("files", {
   user_id: varchar("user_id", { length: 256 }).notNull(), // Clerk AUth ID
   created_at: timestamp("created_at").notNull().defaultNow(),
 });
+
+export type SelectJob = typeof jobsTable.$inferSelect;
+export type UserId = (typeof jobsTable.$inferSelect)["user_id"];
