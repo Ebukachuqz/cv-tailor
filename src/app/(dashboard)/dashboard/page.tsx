@@ -3,10 +3,12 @@ import { auth } from "@clerk/nextjs/server";
 import { Ghost } from "lucide-react";
 import React from "react";
 import { getUsersJobsAction } from "../_actions";
+import UploadButton from "./_components/UploadButton";
 
 export default async function page() {
   const { userId } = auth();
-  const jobs = await getUsersJobsAction(userId!);
+  const jobs = [];
+  // await getUsersJobsAction(userId!);
 
   return (
     <MaxWidthWrapper className="flex flex-col gap-4">
@@ -23,6 +25,8 @@ export default async function page() {
             <Ghost className="h-8 w-8 text-zinc-800" />
             <h3 className="font-semibold text-xl">Pretty empty around here</h3>
             <p>Let&apos;s upload your first PDF.</p>
+
+            <UploadButton />
           </div>
         ) : (
           <div>{"jobs"}</div>
