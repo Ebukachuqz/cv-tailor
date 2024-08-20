@@ -32,4 +32,5 @@ export const filesTable = pgTable("files", {
 });
 
 export type SelectJob = typeof jobsTable.$inferSelect;
+export type NewFile = typeof filesTable.$inferInsert;;
 export type UserId = (typeof jobsTable.$inferSelect)["user_id"];
