@@ -14,8 +14,15 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import LoadingModal from "@/components/shared/LoadingModal";
+import { uploadCVAction } from "@/actions/tailorcvActions";
+import React from "react";
+import { Loader2 } from "lucide-react";
 
 const JobUploadForm = () => {
+  const [isUploading, setIsUploading] = React.useState(false);
+  const [uploadProgress, setUploadProgress] = React.useState(0);
+  const [uploadingMessage, setUploadingMessage] = React.useState("");
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
   });
@@ -29,13 +36,33 @@ const JobUploadForm = () => {
     }
   };
 
-  const onSubmit = (data: FormSchema) => {
-    console.log("Form data", data);
-    // Handle form submission, such as sending the data to an API
+  const onSubmit = async (data: FormSchema) => {
+    setIsUploading(true);
+    setUploadProgress(0);
+    setUploadingMessage(`Uploading file: ${uploadProgress}%`);
+    const { jobDescription, file } = data;
+    try {
+      await uploadCVAction(
+        file,
+        (progress: number) => {
+          setUploadProgress(progress);
+        },
+        (success: boolean) => {
+          if (success) {
+            setUploadingMessage(`Saving to DB...`);
+          }
+        }
+      );
+    } catch (error: any) {
+      console.log(error);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
     <Form {...form}>
+      <LoadingModal isOpen={isUploading} message={uploadingMessage} />
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
@@ -72,8 +99,13 @@ const JobUploadForm = () => {
           )}
         />
         <div className="w-full flex items-center justify-center">
-          <Button className="" type="submit">
-            Submit
+          <Button className="" type="submit" disabled={isUploading}>
+            Submit{" "}
+            {isUploading ? (
+              <span>
+                <Loader2 className="ml-1 h-4 w-4 animate-spin" />
+              </span>
+            ) : null}
           </Button>
         </div>
       </form>
