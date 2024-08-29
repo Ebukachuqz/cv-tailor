@@ -18,6 +18,7 @@ import LoadingModal from "@/components/shared/LoadingModal";
 import { uploadCVAction } from "@/actions/tailorcvActions";
 import React from "react";
 import { Loader2 } from "lucide-react";
+import { aiAnalyzeJobAction, saveJobToDbAction } from "@/actions/jobActions";
 
 const JobUploadForm = () => {
   const [isUploading, setIsUploading] = React.useState(false);
@@ -41,8 +42,10 @@ const JobUploadForm = () => {
     setUploadProgress(0);
     setUploadingMessage(`Uploading file: ${uploadProgress}%`);
     const { jobDescription, file } = data;
+
+    // upload and save Job
     try {
-      await uploadCVAction(
+      const fileResponse = await uploadCVAction(
         file,
         (progress: number) => {
           setUploadProgress(progress);
@@ -53,6 +56,28 @@ const JobUploadForm = () => {
           }
         }
       );
+
+      // analyse Job description
+      setUploadingMessage(`AI is analyzing job...`);
+      const jobInfo = await aiAnalyzeJobAction(jobDescription);
+
+      // save job to db
+      setUploadingMessage(`Saving to DB...`);
+      const jobDetails = {
+        title: jobInfo.title,
+        company: jobInfo.company,
+        salary: jobInfo.salary,
+        description: jobInfo.description,
+        requirements: jobInfo.requirements,
+        location: jobInfo.location,
+        type: jobInfo.type,
+        rawText: jobDescription,
+        file_id: fileResponse.id,
+        user_id: fileResponse.user_id,
+      };
+
+      const jobResponse = await saveJobToDbAction(jobDetails);
+      console.log(jobResponse);
     } catch (error: any) {
       console.log(error);
     } finally {

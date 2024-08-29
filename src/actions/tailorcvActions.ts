@@ -27,7 +27,8 @@ export async function uploadCVAction(
       filekey,
       user_id: userId!,
     };
-    await saveFiletoDB(fileDetails);
+    const fileDbDetails = await saveFiletoDB(fileDetails);
+    return fileDbDetails[0];
   } catch (error: any) {
     console.log(error);
     toast.error(`File upload failed: ${error.message}`);
