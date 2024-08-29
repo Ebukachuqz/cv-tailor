@@ -9,8 +9,11 @@ import {
 
 export const jobsTable = pgTable("jobs", {
   id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
+  title: text("title"),
+  description: text("description"),
+  type: text("type"),
+  requirements: text("requirements"),
+  rawText: text("rawText").notNull(),
   company: text("company"),
   location: text("location"),
   salary: text("salary"),
@@ -32,5 +35,6 @@ export const filesTable = pgTable("files", {
 });
 
 export type SelectJob = typeof jobsTable.$inferSelect;
-export type NewFile = typeof filesTable.$inferInsert;;
+export type NewJob = typeof jobsTable.$inferInsert;
+export type NewFile = typeof filesTable.$inferInsert;
 export type UserId = (typeof jobsTable.$inferSelect)["user_id"];
